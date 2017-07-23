@@ -35,12 +35,12 @@ public class MailService {
 
     public void send() throws IOException, TemplateException, MessagingException {
         Mail mail = new Mail();
-        mail.setTo("gpatricio@pivotal.io");
+        mail.setTo("someone@mail.com");
         mail.setSubject("Nothing relevant");
 
         MimeMessage message = sender.createMimeMessage();
 
-        message.setFrom("gpatricio@pivotal.io");
+        message.setFrom("foo");
         message.setRecipients(MimeMessage.RecipientType.TO, mail.getTo());
         message.setSubject(mail.getSubject());
 
@@ -58,18 +58,10 @@ public class MailService {
         //IMG PART
         BodyPart imgPart = new MimeBodyPart();
         String fileName = "robot.png";
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        if (classLoader == null) {
-            classLoader = this.getClass().getClassLoader();
-            if (classLoader == null) {
-                System.out.println("IT IS NULL AGAIN!!!!");
-            }
-        }
-
+        ClassLoader classLoader = this.getClass().getClassLoader();
         DataSource ds = new URLDataSource(classLoader.getResource(fileName));
         imgPart.setDataHandler(new DataHandler(ds));
         imgPart.setHeader("Content-ID", "<" + imageContentId + ">");
-
 
         multipart.addBodyPart(imgPart);
         message.setContent(multipart);
